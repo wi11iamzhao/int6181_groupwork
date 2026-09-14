@@ -24,7 +24,6 @@ def get_quantile_index(quantile_list:list, data:float)->int:
   return 100
 
 def get_vix_data() -> dict:
-  # TODO:Fix db initialization
   if Path('./hdfdb/daily.hdf5').is_file():
     hdfdb = utils.stock_database.StockDatabase('./hdfdb/daily.hdf5')
     vix_data_old =  hdfdb.load_stock_data('^vix')
