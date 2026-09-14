@@ -30,7 +30,7 @@ def get_vix_data() -> dict:
     vix_data_old =  hdfdb.load_stock_data('^vix')
     if vix_data_old is not None:
       last_date = vix_data_old['date_list'][-1]
-      last_date_str = utils.timestamp_to_str(last_date)
+      last_date_str = utils.float_time_to_str(last_date, '%Y-%m-%d')
       vix_data_new = data_updata_tool.load_stock_data_from_yfinance('^VIX', last_date_str)
       vix_data_merged = {
         'open_data_list':vix_data_old['open_data_list'][:-1] + vix_data_new['open_data_list'],
@@ -70,8 +70,8 @@ def draw_echarts(vix_data:dict, output_len:int, charts_name:str):
   candlestick_data_list = full_candlestick_data_list[len(vix_data['date_list']) - output_len:]
   date_str_list = []
   for i in range(output_len):
-    date = vix_data['date_list'][len(vix_data['date_list']) - output_len + i].timestamp()
-    date_str = datetime.datetime.fromtimestamp(date).strftime('%Y%m%d')
+    date = datetime.datetime.fromtimestamp(vix_data['date_list'][len(vix_data['date_list']) - output_len + i])
+    date_str = date.strftime('%Y%m%d')
     date_str_list.append(date_str)
 
   candlestick_view = pyecharts_tool.init_candlestick_view(

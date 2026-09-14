@@ -15,7 +15,10 @@ def load_stock_data_from_yfinance(code:str, start_time_str='2000-01-01') -> dict
     low_data_list = stock_data['Low'].to_list()
     high_data_list = stock_data['High'].to_list()
     volume_data_list = stock_data['Volume'].to_list()
-    date_list = stock_data['Date'].to_list()
+    _date_list = stock_data['Date'].to_list()
+    date_list = []
+    for date in _date_list:
+       date_list.append(date.timestamp())
     result_dict = {
       'open_data_list':open_data_list,
       'close_data_list':close_data_list,

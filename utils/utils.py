@@ -121,11 +121,18 @@ def get_candlestick_data_list(data_dict:dict) -> list:
   return candlestick_data_list
 
 def str_time_to_float(
-  time_t:string,
-  format='%Y%m%d'
+    time_t:string,
+    format='%Y%m%d'
   ) -> float:
   time_t = time.strptime(time_t, format)
   return time.mktime(time_t)
+
+def float_time_to_str(
+    time_f:float,
+    format='%Y%m%d'
+  ) -> string:
+  _time_dt = datetime.datetime.fromtimestamp(time_f)
+  return _time_dt.strftime(format)
 
 def timestamp_to_str(
   timestamp:float,
