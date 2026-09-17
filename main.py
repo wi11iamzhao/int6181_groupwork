@@ -73,7 +73,7 @@ def draw_charts(vix_data:dict, output_len:int, output_path:str):
   gird_view.render(output_path + 'result_{}.html'.format(time.strftime("%Y-%m-%d", time.localtime())))
 
 def main():
-  main_logger = Logger('./log/' + time.strftime("%Y-%m-%d", time.localtime()) + '.txt')
+  main_logger = Logger('./log/' + time.strftime("%Y-%m-%d", time.localtime()) + '.log')
   logger = main_logger.logger
   parser = argparse.ArgumentParser()
   parser.add_argument('-u', 

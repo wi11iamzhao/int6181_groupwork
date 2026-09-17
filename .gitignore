@@ -1,5 +1,5 @@
 *.html
-/hdfdb/*
-/output/*
-/log/*
+/hdfdb/*.hdf5
+/output/*.html
+/log/*.log
 /__pycache__
