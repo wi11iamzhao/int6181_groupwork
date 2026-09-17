@@ -1,6 +1,5 @@
 import yfinance
 import datetime
-import utils
 
 def load_stock_data_from_yfinance(code:str, start_time_str='2000-01-01') -> dict:
   try:
