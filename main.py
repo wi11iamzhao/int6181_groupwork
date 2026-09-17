@@ -160,7 +160,7 @@ def main():
     else:
       local_data_last_date = vix.get_vix_data_timestamp(vix_data_local)
       timestamp_str = vix.get_vix_data_timestamp_str(vix_data_local)
-      delta_time = datetime.datetime.now().timestamp() - local_data_last_date.timestamp().timestamp()
+      delta_time = datetime.datetime.now().timestamp() - local_data_last_date.timestamp()
       if delta_time < 3600 * 24:
         logger.info('Local VIX data is valid,no update is required.,timestamp:{}.'.format(timestamp_str))
         vix_data = vix_data_local
@@ -184,7 +184,7 @@ def main():
       return
     local_data_last_date = vix.get_vix_data_timestamp(vix_data_local)
     timestamp_str = vix.get_vix_data_timestamp_str(vix_data_local)
-    delta_time = datetime.datetime.now().timestamp() - local_data_last_date.timestamp().timestamp()
+    delta_time = datetime.datetime.now().timestamp() - local_data_last_date.timestamp()
     if delta_time < 3600 * 24:
       logger.info('Local VIX data is valid,timestamp:{}.'.format(timestamp_str))
     else:
