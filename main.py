@@ -150,7 +150,7 @@ def main():
       if vix_data_new is None:
         logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
         return
-      vix_data = vix.update_local_vix_data(None, vix_data)
+      vix_data = vix.update_local_vix_data(None, vix_data_new)
       if vix_data is None:
         logger.warning('Failed to update local VIX data.!Please check the disk and permissions.Attempting to download the full VIX data now.')
         vix_data = vix.get_vix_data_from_yfinance()
