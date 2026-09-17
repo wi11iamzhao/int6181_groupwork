@@ -14,17 +14,32 @@ pip install yfinance pyecharts h5py
 - 使用h5py缓存大量数据
 - 使用pyecharts生成网页图表展示数据
 ## 运行
-尚未完全完工，目前运行vix.py会在目录下输出一个当日的运行结果，文件名为`vix_日期_.html`
+直接运行，输出echart  
+```bash
+python main.py
+```
+离线模式，无需从yahoo finance更新数据，适用于无法访问该服务的网络环境  
+```bash
+python main.py --offline
+```
+仅更新本地数据，不输出任何结果  
+```bash
+python main.py --update
+```
+获取帮助  
+```bash
+python main.py --help
+```
 ## TODO
 ### 已计划
 - [X] 修复h5py无法正常存储数据的问题
-- [ ] 增加命令行接口
-- [ ] 增强命令行交互
+- [X] 增强命令行交互
 - [ ] 完善细节
-### 待定
 - [ ] 增加一个新的因子
+- [ ] 实现运行后直接调用系统浏览器加载输出
+### 待定
 - [ ] 编写安装脚本`setup.py`
 - [ ] 增加测试用例
 - [ ] 完善README
-- [ ] 实现运行后直接调用系统浏览器加载输出
+
 
