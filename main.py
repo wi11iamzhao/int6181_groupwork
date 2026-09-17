@@ -193,8 +193,8 @@ def main():
 
   # Check VIX data
   if vix_data is None:
-    logger.error('Internal error! VIX data is None. Exit!')
-  draw_charts(vix_data, 720, 'all')
+    logger.error('Internal error! vix_data is None. Exit!')
+  draw_charts(vix_data, 720, './output/')
   logger.info('Output result to ./output/result_all.html')
 if __name__ == '__main__':
   main()
