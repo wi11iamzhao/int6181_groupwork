@@ -35,35 +35,17 @@ def update_local_vix_data(vix_data_local:dict, vix_data_new:dict) -> dict:
   else:
     vix_data_merged = vix_data_new
   hdfdb = utils.stock_database.StockDatabase('./hdfdb/daily.hdf5')
-  hdfdb.update_stock_data('^vix', vix_data_merged)
+  hdfdb.update_stock_data('^VIX', vix_data_merged)
   del hdfdb
   return vix_data_merged
 
-def get_vix_data_timestamp(vix_data:dict) -> datetime.datetime:
+def get_vix_data_datetime(vix_data:dict) -> datetime.datetime:
   last_date = vix_data['date_list'][-1]
-  timestamp = datetime.datetime.fromtimestamp(last_date)
-  return timestamp
+  return datetime.datetime.fromtimestamp(last_date)
 
-def get_vix_data_timestamp_str(vix_data:dict) -> str:
-  timestamp = get_vix_data_timestamp(vix_data)
+def get_vix_data_datetime_str(vix_data:dict) -> str:
+  timestamp = get_vix_data_datetime(vix_data)
   return timestamp.strftime('%Y-%m-%d %H:%M:%S')
 
 def get_vix_data_length(vix_data:dict) -> int:
   return len(vix_data['date_list'])
-
-def generate_percentile_list(data_list:list) -> list:
-  precentile_list = []
-  for i in range(101):
-    p_i = np.percentile(data_list, i)
-    precentile_list.append(p_i)
-  return precentile_list
-
-def get_precentile_index(precentile_list:list, data:float) -> int:
-  if data < precentile_list[0]:
-    return -1
-  for i in range(100):
-    if data >= precentile_list[i] and data < precentile_list[i+1]:
-      return i
-    else:
-      continue
-  return 100

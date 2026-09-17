@@ -139,3 +139,20 @@ def timestamp_to_str(
   format='%Y-%m-%d'
   ) -> string:
   return datetime.fromtimestamp(timestamp).strftime(format)
+
+def generate_percentile_list(data_list:list) -> list:
+  precentile_list = []
+  for i in range(101):
+    p_i = np.percentile(data_list, i)
+    precentile_list.append(p_i)
+  return precentile_list
+
+def get_precentile_index(precentile_list:list, data:float) -> int:
+  if data < precentile_list[0]:
+    return -1
+  for i in range(100):
+    if data >= precentile_list[i] and data < precentile_list[i+1]:
+      return i
+    else:
+      continue
+  return 100
