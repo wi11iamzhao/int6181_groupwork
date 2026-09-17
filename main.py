@@ -11,23 +11,10 @@ from utils import utils
 
 def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_len:int, output_path:str):
   vix_precentile_list = utils.generate_percentile_list(vix_data['close_data_list'])
-  vix_positive_index_list = []
-  vix_negative_index_list = []
-  for i in range(output_len):
-    data = vix_data['close_data_list'][len(vix_data['date_list']) - output_len + i]
+  vix_index_list = []
+  for data in vix_data['close_data_list']:
     index = utils.get_precentile_index(vix_precentile_list, data)
-    if index > 50:
-      vix_positive_index_list.append(index - 50)
-      vix_negative_index_list.append(0)
-    elif index < 50:
-      vix_positive_index_list.append(0)
-      vix_negative_index_list.append(index - 50)
-    else:
-      vix_positive_index_list.append(0)
-      vix_negative_index_list.append(0)
-
-  # full_vix_candlestick_data_list = utils.get_candlestick_data_list(vix_data)
-  # vix_candlestick_data_list = full_vix_candlestick_data_list[len(vix_data['date_list']) - output_len:]
+    vix_index_list.append(index - 50)
   full_spx_candlestick_data_list = utils.get_candlestick_data_list(spx_data)
   spx_candlestick_data_list = full_spx_candlestick_data_list[len(spx_data['date_list']) - output_len:]
   date_str_list = []
@@ -42,20 +29,12 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
     spx_ma_delta_list.append(delta)
 
   spx_precentile_list = utils.generate_percentile_list(spx_ma_delta_list)
-  spx_positive_index_list = []
-  spx_negative_index_list = []
-  for i in range(output_len):
-    data = spx_ma_delta_list[i]
+  spx_index_list = []
+  for data in spx_ma_delta_list:
     index = utils.get_precentile_index(spx_precentile_list, data)
-    if index > 50:
-      spx_positive_index_list.append(index - 50)
-      spx_negative_index_list.append(0)
-    elif index < 50:
-      spx_positive_index_list.append(0)
-      spx_negative_index_list.append(index - 50)
-    else:
-      vix_positive_index_list.append(0)
-      spx_negative_index_list.append(0)
+    spx_index_list.append(index - 50)
+  full_spx_candlestick_data_list = utils.get_candlestick_data_list(spx_data)
+  spx_candlestick_data_list = full_spx_candlestick_data_list[len(spx_data['date_list']) - output_len:]
 
   spx_candlestick_view = pyecharts_tool.init_candlestick_view(
     candlestick_dicts=[{
@@ -78,15 +57,9 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
     x_axis_items=date_str_list,
     bar_data_dicts=[
       {
-      'name':'SPX-MA250百分位指数',
-      'color':'red',
-      'data':spx_positive_index_list,
-      'stack':'stack_1',
-      },
-      {
-      'name':'SPX-MA250百分位指数',
-      'color':'green',
-      'data':spx_negative_index_list,
+      'name':'SPX-MA250分位指数',
+      'color':pyecharts_tool.get_bar_green_and_red_color(),
+      'data':spx_index_list[0-output_len:],
       'stack':'stack_1',
       }],
     stack='stack_1',
@@ -94,19 +67,12 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
     is_on_zero=True,)
   vix_percentile_bar_view = pyecharts_tool.init_bar_view(
       x_axis_items=date_str_list,
-      bar_data_dicts=[
-        {
-        'name':'VIX百分位指数',
-        'color':'red',
-        'data':vix_positive_index_list,
+      bar_data_dicts=[{
+        'name':'VIX分位指数',
+        'color':pyecharts_tool.get_bar_green_and_red_color(),
+        'data':vix_index_list[0-output_len:],
         'stack':'stack_2',
-        },
-        {
-        'name':'VIX百分位指数',
-        'color':'green',
-        'data':vix_negative_index_list,
-        'stack':'stack_2',
-        }],
+        },],
       line_dicts=[{
       'name':'VIX',
       'data':vix_data['close_data_list'][len(vix_data['close_data_list']) - output_len:],
@@ -252,7 +218,7 @@ def main():
   if args.update is True:
     return
   spx_ma250_list = ma.get_moving_average_data_list(spx_data, 250)
-  draw_charts(vix_data, spx_data, spx_ma250_list, 720, './output/')
+  draw_charts(vix_data, spx_data, spx_ma250_list, 2000, './output/')
   logger.info('Output result to ./output/result_{}.html'.format(time.strftime("%Y-%m-%d", time.localtime())))
 
 if __name__ == '__main__':
