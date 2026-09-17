@@ -96,7 +96,7 @@ def main():
                       help='Silent Mode,Do not use the system browser to display the results.')
   args = parser.parse_args()
   # args hacker for quick test
-  args.update = True
+  # args.update = True
   # args.offline = True
   # args.silent = True
 
