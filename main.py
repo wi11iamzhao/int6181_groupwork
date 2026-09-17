@@ -66,16 +66,10 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
     x_axis_indexs=[0,1,2],
     zoom_range_start=20.0,
     zoom_range_end=80.0,
-    line_dicts=[
-      {
+    line_dicts=[{
         'name':'MA250',
         'data':spx_ma_list[len(spx_ma_list) - output_len:],
-        'color':'#ff0000'},
-      {
-        'name':'VIX',
-        'data':vix_data['close_data_list'][len(spx_ma_list) - output_len:],
-        'color':'#151B54'
-      }],
+        'color':'#ff0000'}],
     mark_line_items=None,
     title='SP500 Index',
     sub_title='',
@@ -94,8 +88,7 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
       'color':'green',
       'data':spx_negative_index_list,
       'stack':'stack_1',
-      },
-    ],
+      }],
     stack='stack_1',
     is_percentage=False,
     is_on_zero=True,)
@@ -113,8 +106,11 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
         'color':'green',
         'data':vix_negative_index_list,
         'stack':'stack_2',
-        },
-      ],
+        }],
+      line_dicts=[{
+      'name':'VIX',
+      'data':vix_data['close_data_list'][len(vix_data['close_data_list']) - output_len:],
+      'color':'#151B54'}],
       stack='stack_2',
       is_percentage=False,
       is_on_zero=True,)
