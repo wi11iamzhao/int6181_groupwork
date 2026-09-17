@@ -64,6 +64,9 @@ def get_vix_data_timestamp(vix_data:dict) -> datetime.datetime:
 def get_vix_data_timestamp_str(vix_data:dict) -> str:
   timestamp = get_vix_data_timestamp(vix_data)
   return timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
+def get_vix_data_length(vix_data:dict) -> int:
+  return len(vix_data['date_list'])
   
 def test_and_draw_echarts(vix_data:dict, output_len:int):
   precentile_list = generate_percentile_list(vix_data['close_data_list'])

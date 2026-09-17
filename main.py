@@ -112,16 +112,23 @@ def main():
     vix_data_local = vix.load_vix_data_from_local_file()
     if vix_data_local is None:
       logger.info('No local vix data exist.Just try to create it.')
+      time_strat = time.perf_counter()
       vix_data = vix.get_vix_data_from_yfinance()
+      time_end = time.perf_counter()
       if vix_data is None:
         logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
         return
+      time_delta = time_end - time_strat
+      vix_data_length = vix.get_vix_data_length(vix_data)
+      timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
+      logger.info('Download VIX data from Yahoo Finance Successed.time={:.3f}s,length={},timestamp={}'.format(time_delta, vix_data_length, timestamp_str))
       update_result = vix.update_local_vix_data(None, vix_data)
       if update_result is None:
         logger.error('Failed to update local VIX data.!Please check the disk and permissions.Exit!')
       else:
-        timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
-        logger.info('Local VIX data updated successfully.')
+        vix_data_length = vix.get_vix_data_length(update_result)
+        timestamp_str = vix.get_vix_data_timestamp_str(update_result)
+        logger.info('Local VIX data updated successfully.length={},timestamp={}'.format(vix_data_length, timestamp_str))
       return
     else:
       local_data_last_date = vix.get_vix_data_timestamp(vix_data_local)
@@ -131,13 +138,23 @@ def main():
         logger.info('Local VIX data is valid,timestamp:{}.Exit!'.format(timestamp_str))
         return
       logger.info('Local VIX data may be invalid,timestamp:{}.Try to download vix data from yahoo fianance'.format(timestamp_str))
-      vix_data = vix.get_vix_data_from_yfinance(local_data_last_date)
+      time_strat = time.perf_counter()
+      vix_data = vix.get_vix_data_from_yfinance()
+      time_end = time.perf_counter()
       if vix_data is None:
         logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
         return
+      time_delta = time_end - time_strat
+      vix_data_length = vix.get_vix_data_length(vix_data)
+      timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
+      logger.info('Download VIX data from Yahoo Finance Successed.time={:.3f}s,length={},timestamp={}'.format(time_delta, vix_data_length, timestamp_str))
       update_result = vix.update_local_vix_data(None, vix_data)
       if update_result is None:
         logger.error('Failed to update local VIX data.!Please check the disk and permissions.Exit!')
+      else:
+        vix_data_length = vix.get_vix_data_length(update_result)
+        timestamp_str = vix.get_vix_data_timestamp_str(update_result)
+        logger.info('Local VIX data updated successfully.length={},timestamp={}'.format(vix_data_length, timestamp_str))
       return
     return
   
@@ -146,37 +163,69 @@ def main():
   if args.offline is False:
     if vix_data_local is None:
       logger.info('No local vix data exist.Just try to create it.')
+      time_strat = time.perf_counter()
       vix_data_new = vix.get_vix_data_from_yfinance()
+      time_end = time.perf_counter()
       if vix_data_new is None:
         logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
         return
+      time_delta = time_end - time_strat
+      vix_data_length = vix.get_vix_data_length(vix_data_new)
+      timestamp_str = vix.get_vix_data_timestamp_str(vix_data_new)
+      logger.info('Download VIX data from Yahoo Finance Successed.time={:.3f}s,length={},timestamp={}'.format(time_delta, vix_data_length, timestamp_str))
       vix_data = vix.update_local_vix_data(None, vix_data_new)
       if vix_data is None:
         logger.warning('Failed to update local VIX data.!Please check the disk and permissions.Attempting to download the full VIX data now.')
-        vix_data = vix.get_vix_data_from_yfinance()
+        time_strat = time.perf_counter()
+        vix_data_new = vix.get_vix_data_from_yfinance()
+        time_end = time.perf_counter()
         if vix_data is None:
           logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
           return
+        time_delta = time_end - time_strat
+        vix_data_length = vix.get_vix_data_length(vix_data)
+        timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
+        logger.info('Download VIX data from Yahoo Finance Successed.time={:.3f}s,length={},timestamp={}'.format(time_delta, vix_data_length, timestamp_str))
+      else:
+        vix_data_length = vix.get_vix_data_length(vix_data)
+        timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
+        logger.info('Local VIX data updated successfully.length={},timestamp={}'.format(vix_data_length, timestamp_str))
     else:
       local_data_last_date = vix.get_vix_data_timestamp(vix_data_local)
       timestamp_str = vix.get_vix_data_timestamp_str(vix_data_local)
       delta_time = datetime.datetime.now().timestamp() - local_data_last_date.timestamp()
       if delta_time < 3600 * 24:
-        logger.info('Local VIX data is valid,no update is required.,timestamp:{}.'.format(timestamp_str))
+        logger.info('Local VIX data is valid,no update is required.timestamp:{}.'.format(timestamp_str))
         vix_data = vix_data_local
       else:
         logger.info('Local VIX data may be invalid,timestamp:{}.Try to download vix data from yahoo fianance'.format(timestamp_str))
-        vix_data_new = vix.get_vix_data_from_yfinance(local_data_last_date)
+        time_strat = time.perf_counter()
+        vix_data_new = vix.get_vix_data_from_yfinance()
+        time_end = time.perf_counter()
+        time_delta = time_end - time_strat
+        vix_data_length = vix.get_vix_data_length(vix_data_new)
+        timestamp_str = vix.get_vix_data_timestamp_str(vix_data_new)
+        logger.info('Download VIX data from Yahoo Finance Successed.time={:.3f}s,length={},timestamp={}'.format(time_delta, vix_data_length, timestamp_str))
         if vix_data_new is None:
           logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
           return
         vix_data = vix.update_local_vix_data(vix_data_local, vix_data_new)
         if vix_data is None:
           logger.warning('Failed to update local VIX data.!Please check the disk and permissions.Attempting to download the full VIX data now.')
+          time_strat = time.perf_counter()
           vix_data = vix.get_vix_data_from_yfinance()
+          time_end = time.perf_counter()
           if vix_data is None:
             logger.error('Failed to download VIX data from Yahoo Finance.Please check your network connection.Exit!')
             return
+          time_delta = time_end - time_strat
+          vix_data_length = vix.get_vix_data_length(vix_data)
+          timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
+          logger.info('Download VIX data from Yahoo Finance Successed.time={:.3f}s,length={},timestamp={}'.format(time_delta, vix_data_length, timestamp_str))
+        else:
+          vix_data_length = vix.get_vix_data_length(vix_data)
+          timestamp_str = vix.get_vix_data_timestamp_str(vix_data)
+          logger.info('Local VIX data updated successfully.length={},timestamp={}'.format(vix_data_length, timestamp_str))
   else:
     # Offline Mode
     if vix_data_local is None:
