@@ -69,11 +69,11 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
     line_dicts=[
       {
         'name':'MA250',
-        'data':spx_ma_list,
+        'data':spx_ma_list[len(spx_ma_list) - output_len:],
         'color':'#ff0000'},
       {
         'name':'VIX',
-        'data':vix_data['close_data_list'],
+        'data':vix_data['close_data_list'][len(spx_ma_list) - output_len:],
         'color':'#151B54'
       }],
     mark_line_items=None,
