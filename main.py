@@ -25,7 +25,7 @@ def draw_charts(vix_data:dict, spx_data:dict, spx_ma_list:list[float], output_le
 
   spx_ma_delta_list = []
   for i in range(len(spx_data['close_data_list'])):
-    delta = spx_data['close_data_list'][i] - spx_ma_list[i]
+    delta = (spx_data['close_data_list'][i] - spx_ma_list[i]) / spx_data['close_data_list'][i]
     spx_ma_delta_list.append(delta)
 
   spx_precentile_list = utils.generate_percentile_list(spx_ma_delta_list)
